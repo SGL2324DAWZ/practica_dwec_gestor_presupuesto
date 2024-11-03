@@ -2,6 +2,10 @@
 
 // TODO: Variable global
 
+var a = 4;
+var b = 5;
+var c = a + b;
+alert(c);
 
 function actualizarPresupuesto() {
     // TODO
