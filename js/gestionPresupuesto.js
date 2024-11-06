@@ -30,17 +30,18 @@ function mostrarPresupuesto() {
     return resultado;
 }
 
-function CrearGasto(descripcionGasto, valorGasto) {
+function CrearGasto(descripcionGasto, valorGasto, fechaGasto, etiquetaGasto) {
     //asigna a la descripcion del objeto la pasada por parametro
     this.descripcion = descripcionGasto;
 
     //comprueba si es un numero positivo y despues le asigna el valor pasado por parametro
-    if (typeof valorGasto === "number" && valor >= 0) {
+    if (typeof valorGasto === "number" && valorGasto >= 0) {
         this.valor = valorGasto;
     }
     else{
         this.valor = 0;
     }
+
 }
 
 function mostrarGasto() {
@@ -58,10 +59,10 @@ function actualizarValor(valorNuevo) {
 }
 
 function listarGastos() {
-
+    return gastos;
 }
-function anyadirGasto(){
 
+function anyadirGasto(){
 }
 
 function borrarGasto(){
@@ -73,7 +74,7 @@ function calcularTotalGastos(){
 }
 
 function calcularBalance() {
-    
+
 }
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.
