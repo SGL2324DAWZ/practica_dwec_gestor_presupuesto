@@ -9,6 +9,8 @@ var c = a + b;
 console.log(c);
 
 let presupuesto = 0;
+let gastos = [];
+let idGasto = 0;
 
 function actualizarPresupuesto(movimiento) {
     if (typeof movimiento === "number" && movimiento >= 0) {
