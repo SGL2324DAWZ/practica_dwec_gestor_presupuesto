@@ -50,19 +50,6 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, etiquetaGasto) {
         this.fecha = Date.now();
     }
 
-    //comprueba las etiquetas
-    if (etiquetas.length > 0) {
-        this.etiquetas = etiquetas;
-    } 
-    else {
-        this.etiquetas = [];
-    }
-
-    this.anyadirEtiquetas = function(...nuevasEtiquetas) {
-        for (let etiqueta of nuevasEtiquetas) {
-            this.etiquetas.push(etiqueta);
-        }
-    };
 }
 
 function mostrarGasto() {
@@ -83,19 +70,19 @@ function listarGastos() {
     return gastos;
 }
 
-function anyadirGasto(){
+function anyadirGasto(gasto){
+    
 }
 
-function borrarGasto(){
-
+function borrarGasto(idGasto){
+    
 }
 
 function calcularTotalGastos(){
-
 }
 
 function calcularBalance() {
-
+    return presupuesto - calcularTotalGastos();
 }
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.
