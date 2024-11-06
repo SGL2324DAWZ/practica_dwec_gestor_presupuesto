@@ -29,8 +29,10 @@ function mostrarPresupuesto() {
 }
 
 function CrearGasto(descripcionGasto, valorGasto) {
+    //asigna a la descripcion del objeto la pasada por parametro
     this.descripcion = descripcionGasto;
 
+    //comprueba si es un numero positivo y despues le asigna el valor pasado por parametro
     if (typeof valorGasto === "number" && valor >= 0) {
         this.valor = valorGasto;
     }
@@ -43,6 +45,9 @@ function mostrarGasto() {
     console.log("Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€.");
 }
 
+function actualizarDescripcion(descripcionNueva){
+    this.descripcion = descripcionNueva;
+}
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.
 // Las funciones y objetos deben tener los nombres que se indican en el enunciado
