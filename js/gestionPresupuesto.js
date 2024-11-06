@@ -28,9 +28,17 @@ function mostrarPresupuesto() {
     return resultado;
 }
 
-function CrearGasto() {
-    // TODO
+function CrearGasto(descripcionGasto, valorGasto) {
+    this.descripcion = descripcionGasto;
+
+    if (typeof valorGasto === "number" && valor >= 0) {
+        this.valor = valorGasto;
+    }
+    else{
+        this.valor = 0;
+    }
 }
+
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.
 // Las funciones y objetos deben tener los nombres que se indican en el enunciado
