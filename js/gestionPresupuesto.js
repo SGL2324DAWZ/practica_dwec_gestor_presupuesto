@@ -22,7 +22,10 @@ function actualizarPresupuesto(movimiento) {
 }
 
 function mostrarPresupuesto() {
-    // TODO
+    let resultado = "";
+    resultado = "Tu presupuesto actual es de " + presupuesto + "€";
+
+    return resultado;
 }
 
 function CrearGasto() {
