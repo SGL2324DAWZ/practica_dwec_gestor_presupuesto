@@ -42,6 +42,27 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, etiquetaGasto) {
         this.valor = 0;
     }
 
+    //comprueba si la fecha es valida si no hay ninguna asigna la de hoy
+    if (Date.parse(fechaGasto)) {
+        this.fecha = Date.parse(fechaGasto);
+    } 
+    else {
+        this.fecha = Date.now();
+    }
+
+    //comprueba las etiquetas
+    if (etiquetas.length > 0) {
+        this.etiquetas = etiquetas;
+    } 
+    else {
+        this.etiquetas = [];
+    }
+
+    this.anyadirEtiquetas = function(...nuevasEtiquetas) {
+        for (let etiqueta of nuevasEtiquetas) {
+            this.etiquetas.push(etiqueta);
+        }
+    };
 }
 
 function mostrarGasto() {
