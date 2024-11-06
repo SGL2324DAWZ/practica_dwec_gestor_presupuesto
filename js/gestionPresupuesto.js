@@ -5,10 +5,20 @@
 var a = 4;
 var b = 5;
 var c = a + b;
-alert(c);
 
-function actualizarPresupuesto() {
-    // TODO
+console.log(c);
+
+let presupuesto = 0;
+
+function actualizarPresupuesto(movimiento) {
+    if (typeof movimiento === "number" && movimiento >= 0) {
+        presupuesto = movimiento;
+        return presupuesto;
+    }
+    else {
+        console.log("El valor no puede ser negativo.")
+        return -1;
+    }
 }
 
 function mostrarPresupuesto() {
