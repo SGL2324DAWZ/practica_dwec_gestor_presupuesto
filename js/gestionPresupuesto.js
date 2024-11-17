@@ -107,23 +107,23 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
         }
     }
 
-    this.obtenerPeriodoAgrupacion = function(periodo){
+    this.obtenerPeriodoAgrupacion = function (periodo) {
         let resultado = new Date(this.fecha).getFullYear();
 
-        if(periodo === "mes" || periodo === "dia"){
-            let mes = new Date(this.fecha).getMonth() + 1; 
-            
-            if(mes < 10){
+        if (periodo === "mes" || periodo === "dia") {
+            let mes = new Date(this.fecha).getMonth() + 1;
+
+            if (mes < 10) {
                 resultado += "-0" + mes;
             }
             else {
                 resultado += "-" + mes;
             }
-            
-            if(periodo === "dia"){
+
+            if (periodo === "dia") {
                 let dia = new Date(this.fecha).getDate();
-                
-                if(dia < 10){
+
+                if (dia < 10) {
                     resultado += "-0" + dia;
                 }
                 else {
@@ -134,6 +134,7 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
         return resultado;
     }
 }
+
 
 
 function agruparGastos() {
