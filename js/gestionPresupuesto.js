@@ -107,23 +107,23 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
         }
     }
 
-    this.obtenerPeriodoAgrupacion = function (periodo) {
+    this.obtenerPeriodoAgrupacion = function(periodo){
         let resultado = new Date(this.fecha).getFullYear();
 
-        if (periodo === "mes" || periodo === "dia") {
-            let mes = new Date(this.fecha).getMonth() + 1;
-
-            if (mes < 10) {
+        if(periodo === "mes" || periodo === "dia"){
+            let mes = new Date(this.fecha).getMonth() + 1; 
+            
+            if(mes < 10){
                 resultado += "-0" + mes;
             }
             else {
                 resultado += "-" + mes;
             }
-
-            if (periodo === "dia") {
+            
+            if(periodo === "dia"){
                 let dia = new Date(this.fecha).getDate();
-
-                if (dia < 10) {
+                
+                if(dia < 10){
                     resultado += "-0" + dia;
                 }
                 else {
@@ -135,7 +135,47 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
     }
 }
 
+function filtrarGastos({fechaDesde, fechaHasta, valorMinimo, valorMaximo, descripcionContiene, etiquetasTiene}){
+    return gastos.filter(function(gasto) {
+        let filtrado = true;
 
+        if(fechaDesde && gasto.fecha < Date.parse(fechaDesde)){
+            filtrado = false;
+        }
+
+        if(fechaHasta && gasto.fecha > Date.parse(fechaHasta)){
+            filtrado = false;
+        }
+        
+        if(valorMinimo && gasto.valor < valorMinimo){
+            filtrado = false;
+        }
+
+        if(valorMaximo && gasto.valor > valorMaximo) {
+            filtrado = false;
+        }
+
+        if(descripcionContiene && !gasto.descripcion.toLowerCase().includes(descripcionContiene.toLowerCase()) ) {
+            filtrado = false;
+        }
+
+        if(etiquetasTiene ){
+            let encontrado = false;
+
+            etiquetasTiene.forEach(etiqueta => {
+                if (gasto.etiquetas.includes(etiqueta)){
+                    encontrado = true;
+                }
+            })
+
+            if (!encontrado){
+                filtrado = false;
+            }
+        }
+
+        return filtrado;
+    })
+}
 
 function agruparGastos() {
 
