@@ -56,11 +56,55 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
         return "Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€.";
     }
 
+    this.mostrarGastoCompleto = function() {
+        let resultado = "";
+
+        resultado = "Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€. \n";
+
+        resultado += "Fecha: " + new Date(this.fecha).toLocaleDateString();
+
+        resultado += "\nEtiquetas: "
+
+        this.etiquetas.forEach(etiqueta =>{
+            resultado += "\n - " + etiqueta
+        })
+    }
     
     this.actualizarDescripcion = function(descripcionNueva){
         this.descripcion = descripcionNueva;
     }
     
+    this.actualizarValor = function(valorNuevo) {
+        if (typeof valorNuevo === "number" && valor >= 0) {
+            this.valor = valorNuevo;
+        }
+    }
+
+    this.actualizarFecha = function(fecha){
+        if (Date.parse(fecha)) {
+            this.fecha = Date.parse(fecha);
+        } 
+    }
+
+    this.anyadirEtiquetas = function(...etiquetasNuevas){
+        etiquetasNuevas.forEach(etiqueta => {
+            //comprueba si la nueva ya esta en la lista de etiquetas del objeto
+            if(!this.etiquetas.includes(etiqueta)){
+                //si no esta la añade
+                this.etiquetas.push(etiqueta)
+            }
+        })
+    }
+
+    this.borrarEtiquetas = function(...etiquetasBorrar){
+        for(let i = 0; i < etiquetasBorrar.length; i++){
+            let posicion = this.etiquetas.indexOf(etiquetasBorrar[i])
+            
+            if(posicion > -1) {
+                this.etiquetas.splice(posicion, 1)
+            }
+        }
+    }
 }
 
 let gasto1 = new CrearGasto("Gasto 1");
