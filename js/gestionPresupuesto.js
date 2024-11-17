@@ -30,7 +30,7 @@ function mostrarPresupuesto() {
     return resultado;
 }
 
-function CrearGasto(descripcionGasto, valorGasto, fechaGasto, etiquetaGasto) {
+function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto) {
     //asigna a la descripcion del objeto la pasada por parametro
     this.descripcion = descripcionGasto;
 
@@ -50,35 +50,56 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, etiquetaGasto) {
         this.fecha = Date.now();
     }
 
-}
+    this.etiquetas = etiquetasGasto;
 
-function mostrarGasto() {
-    console.log("Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€.");
-}
-
-function actualizarDescripcion(descripcionNueva){
-    this.descripcion = descripcionNueva;
-}
-
-function actualizarValor(valorNuevo) {
-    if (typeof valorNuevo === "number" && valor >= 0) {
-        this.valor = valorNuevo;
+    this.mostrarGasto = function() {
+        return "Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€.";
     }
+
+    
+    this.actualizarDescripcion = function(descripcionNueva){
+        this.descripcion = descripcionNueva;
+    }
+    
 }
+
+let gasto1 = new CrearGasto("Gasto 1");
+let gasto2 = new CrearGasto("Gasto 2", 23.55);
+let gasto3 = new CrearGasto("Gasto 3", 23.55, "2021-10-06T13:10" );
+let gasto4 = new CrearGasto("Gasto 4", 23.55, "2021-10-06T13:10", "casa" );
+let gasto5 = new CrearGasto("Gasto 5", 23.55, "2021-10-06T13:10", "casa", "supermercado" );
+let gasto6 = new CrearGasto("Gasto 6", 23.55, "2021-10-06T13:10", "casa", "supermercado", "comida" );
+
 
 function listarGastos() {
     return gastos;
 }
 
 function anyadirGasto(gasto){
-    
+    gasto.id = idGasto;
+    idGasto++;
+    //lo añade a la lista de gastos
+    gastos.push(gasto);
 }
 
 function borrarGasto(idGasto){
-    
+    for (let i = 0; i < gastos.length; i++) {
+        if (gastos[i].id === idGasto){
+            //borro desde la posicion i 1
+            gastos.splice(i, 1);
+            break;
+        }
+    }
 }
 
 function calcularTotalGastos(){
+    let totalGastos = 0;
+
+    gastos.forEach(gasto => {
+        totalGastos += gasto.valor;
+    });
+
+    return totalGastos;
 }
 
 function calcularBalance() {
