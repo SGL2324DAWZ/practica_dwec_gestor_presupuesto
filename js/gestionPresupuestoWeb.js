@@ -101,7 +101,7 @@ function mostrarGastosAgrupadosWeb(agrup, periodo, idElemento) {
             const spanValor = document.createElement("span");
             spanValor.classList = "agrupacion-dato-valor";
             spanValor.innerHTML = agrup[clave];
-            
+
             divDato.appendChild(spanValor);
 
             //añadir el contenedor del dato al contenedor principal
@@ -113,8 +113,8 @@ function mostrarGastosAgrupadosWeb(agrup, periodo, idElemento) {
     }
 }
 
-
 export{
     mostrarDatoEnId,
-    mostrarGastoWeb
+    mostrarGastoWeb,
+    mostrarGastosAgrupadosWeb
 }
