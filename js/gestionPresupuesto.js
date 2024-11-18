@@ -177,8 +177,24 @@ function filtrarGastos({fechaDesde, fechaHasta, valorMinimo, valorMaximo, descri
     })
 }
 
-function agruparGastos() {
+function agruparGastos(periodo = "mes", etiquetas, fechaDesde, fechaHasta = Date.now()) {
+    //llama a filtrarGastos y devuelve una lista filtrada
+    let gastosAgrupados = filtrarGastos({etiquetasTiene:etiquetas, fechaDesde:fechaDesde, fechaHasta:fechaHasta});
 
+    //variable objeto q acumula la suma de los gastos previamente filtrados
+    let objeto = gastosAgrupados.reduce(function (objetoAcumulador, gasto){
+
+        if(typeof objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] != "number"){
+            objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] = 0;
+        }
+
+        //convierte el valor del gasto a un número
+        objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] += parseFloat(gasto.valor);
+
+        return objetoAcumulador;
+    },{});
+
+    return objeto;
 }
 
 /*
