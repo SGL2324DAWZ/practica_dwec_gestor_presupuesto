@@ -25,7 +25,7 @@ function actualizarPresupuesto(movimiento) {
 
 function mostrarPresupuesto() {
     let resultado = "";
-    resultado = "Tu presupuesto actual es de " + presupuesto + "€";
+    resultado = "Tu presupuesto actual es de " + presupuesto + " €";
 
     return resultado;
 }
@@ -53,7 +53,7 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
     this.etiquetas = etiquetasGasto;
 
     this.mostrarGasto = function () {
-        return "Gasto correspondiente a: " + this.descripcion + "con valor de: " + this.valor + "€.";
+        return "Gasto correspondiente a " + this.descripcion + " con valor " + this.valor + " €";
     }
 
     this.mostrarGastoCompleto = function () {
