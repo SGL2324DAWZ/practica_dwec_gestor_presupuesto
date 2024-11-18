@@ -1,4 +1,4 @@
-function mostrarDatoEnId(idElemento, valor){
+function mostrarDatoEnId(valor, idElemento){
     //el id es el elemento del html
     if(idElemento!=null){
         let elemento = document.getElementById(idElemento);
@@ -6,10 +6,12 @@ function mostrarDatoEnId(idElemento, valor){
     }
 }
 
-function mostrarGastoWeb(idElemento, gasto){
+function mostrarGastoWeb(gasto, idElemento){
     if (idElemento != null) {
         //contenedor principal para el gasto
         let divGasto = document.createElement("div")
+
+        divGasto.classList = "gasto"
 
          //crear y agregar la descripción del gasto
         let divDescripcion = document.createElement("div");
@@ -52,6 +54,8 @@ function mostrarGastoWeb(idElemento, gasto){
             objetoBorrarEtiqueta.gasto = gasto;
             objetoBorrarEtiqueta.etiqueta = etiqueta;
 
+            
+
             //asigna un evento para eliminar la etiqueta cuando se haga clic
             divEtiqueta1.addEventListener("click", objetoBorrarEtiqueta);
         });
@@ -65,51 +69,47 @@ function mostrarGastoWeb(idElemento, gasto){
     }
 }
 
-function mostrarGastosAgrupadosWeb(agrup, periodo, idElemento) {
-    if (idElemento != null) {
-        //elemento HTML donde se añadirá la estructura de gastos agrupados
-        const elemento = document.getElementById(idElemento);
-        
-        elemento.innerHTML = "";
+let BorrarEtiquetasHandle = function(){
+    this.handleEvent = function() {
 
-        //contenedor para la agrupación
-        const divAgrupacion = document.createElement("div");
-        divAgrupacion.classList = "agrupacion";
-        
-        //encabezado con el período de agrupación
-        const h1 = document.createElement("h1");
-        h1.innerHTML = "Gastos agrupados por" + periodo;
+        this.gasto.borrarEtiquetas(this.etiqueta);
 
+        repintar();
+    }
+}
+function mostrarGastosAgrupadosWeb( agrup, periodo, idElemento){
+    if(idElemento!=null){
+        var divAgrupacion = document.createElement("div");
+        divAgrupacion.classList="agrupacion";
+
+        var h1 =document.createElement('h1');
+        h1.innerHTML="Gastos agrupados por "+periodo;
         divAgrupacion.appendChild(h1);
 
-        //recorre las claves del objeto agrup y genera la estructura para cada dato
-        const claves = Object.keys(agrup);
+        var claves = Object.keys(agrup);
+        let i=0;
 
-        claves.forEach(clave => {
-            //crea el contenedor para cada dato individual
-            const divDato = document.createElement("div");
-            divDato.classList = "agrupacion-dato";
-            
-            //crea y añade el span para la clave del dato
-            const spanClave = document.createElement("span");
-            spanClave.classList = "agrupacion-dato-clave";
-            spanClave.innerHTML = clave;
+        for(let agrupActual in agrup){
+            var divAgr1 =document.createElement('div');
+            divAgr1.classList="agrupacion-dato";
 
-            divDato.appendChild(spanClave);
+            var spanClave = document.createElement('span');
+            spanClave.classList="agrupacion-dato-clave";
+            spanClave.innerHTML=claves[i];
+            i++;
+            divAgr1.appendChild(spanClave);
 
-            //crea y añade el span para el valor del dato
-            const spanValor = document.createElement("span");
-            spanValor.classList = "agrupacion-dato-valor";
-            spanValor.innerHTML = agrup[clave];
+            var spanValor = document.createElement('span');
+            spanValor.classList="agrupacion-dato-valor";
+            spanValor.innerHTML=agrup[agrupActual];
+            divAgr1.appendChild(spanValor);
 
-            divDato.appendChild(spanValor);
+            divAgrupacion.appendChild(divAgr1);
+        }
 
-            //añadir el contenedor del dato al contenedor principal
-            divAgrupacion.appendChild(divDato);
-        });
-
-        //agregar la estructura completa al elemento HTML
+        var elemento = document.getElementById(idElemento);
         elemento.appendChild(divAgrupacion);
+
     }
 }
 
