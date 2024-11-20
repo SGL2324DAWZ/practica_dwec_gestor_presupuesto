@@ -85,9 +85,9 @@ function mostrarGastoWeb(gasto, idElemento){
         botonBorrar.type = "button";
 
         let objetoBorrar = new BorrarHandle();
+        objetoBorrar.gasto = gasto;
 
-        botonBorrar.id = idElemento;
-        botonBorrar.gasto = gasto;
+        botonBorrar.addEventListener("click", objetoBorrar);
 
         divGasto.appendChild(botonBorrar);
 
