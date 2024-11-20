@@ -1,3 +1,5 @@
+import * as libreriaGestion from './gestionPresupuesto.js';
+
 function mostrarDatoEnId(valor, idElemento){
     //el id es el elemento del html
     if(idElemento!=null){
@@ -77,6 +79,7 @@ let BorrarEtiquetasHandle = function(){
         repintar();
     }
 }
+
 function mostrarGastosAgrupadosWeb( agrup, periodo, idElemento){
     if(idElemento!=null){
         var divAgrupacion = document.createElement("div");
@@ -112,6 +115,35 @@ function mostrarGastosAgrupadosWeb( agrup, periodo, idElemento){
 
     }
 }
+
+function repintar(){
+    mostrarDatoEnId(libreriaGestion.mostrarPresupuesto(), "presupuesto");
+    mostrarDatoEnId(libreriaGestion.calcularTotalGastos(), "gastos-totales");
+    mostrarDatoEnId(libreriaGestion.calcularBalance(), "balance-total");
+
+    let divGastos = document.getElementById("listado-gastos-completo");
+    divGastos.innerHTML = "";
+
+    libreriaGestion.listarGastos().forEach(gasto => {
+        mostrarGastoWeb(gasto, "listado-gastos-completo")
+    })
+
+}
+
+function actualizarPresupuestoWeb() {
+    let nuevoPresupuesto = prompt("Introduce tu presupuesto: ", "100");
+    
+    if(nuevoPresupuesto != null){
+        nuevoPresupuesto = parseFloat(nuevoPresupuesto);
+        libreriaGestion.actualizarPresupuesto(nuevoPresupuesto);
+        
+        repintar();
+    }
+
+}
+
+let botonActualizarPresupuesto = document.getElementById("actualizarpresupuesto");
+botonActualizarPresupuesto.addEventListener("click", actualizarPresupuestoWeb);
 
 export{
     mostrarDatoEnId,
