@@ -224,6 +224,22 @@ function nuevoGastoWeb(){
 let btnanyadirGasto = document.getElementById("anyadirgasto");
 btnanyadirGasto.addEventListener("click", nuevoGastoWeb);
 
+//practica formularios
+
+function nuevoGastoWebFormulario () {
+    let plantillaFormulario = document.getElementById("formulario-template").content.cloneNode(true);;
+    var formulario = plantillaFormulario.querySelector("form");
+    
+    formulario.addEventListener("submit", enviarForm(evento))
+
+    function enviarForm(evento){
+        
+    }
+}
+
+
+
+
 export{
     mostrarDatoEnId,
     mostrarGastoWeb,
