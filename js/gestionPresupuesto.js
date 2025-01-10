@@ -107,23 +107,23 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
         }
     }
 
-    this.obtenerPeriodoAgrupacion = function(periodo){
+    this.obtenerPeriodoAgrupacion = function (periodo) {
         let resultado = new Date(this.fecha).getFullYear();
 
-        if(periodo === "mes" || periodo === "dia"){
-            let mes = new Date(this.fecha).getMonth() + 1; 
-            
-            if(mes < 10){
+        if (periodo === "mes" || periodo === "dia") {
+            let mes = new Date(this.fecha).getMonth() + 1;
+
+            if (mes < 10) {
                 resultado += "-0" + mes;
             }
             else {
                 resultado += "-" + mes;
             }
-            
-            if(periodo === "dia"){
+
+            if (periodo === "dia") {
                 let dia = new Date(this.fecha).getDate();
-                
-                if(dia < 10){
+
+                if (dia < 10) {
                     resultado += "-0" + dia;
                 }
                 else {
@@ -135,40 +135,40 @@ function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto)
     }
 }
 
-function filtrarGastos({fechaDesde, fechaHasta, valorMinimo, valorMaximo, descripcionContiene, etiquetasTiene}){
-    return gastos.filter(function(gasto) {
+function filtrarGastos({ fechaDesde, fechaHasta, valorMinimo, valorMaximo, descripcionContiene, etiquetasTiene }) {
+    return gastos.filter(function (gasto) {
         let filtrado = true;
 
-        if(fechaDesde && gasto.fecha < Date.parse(fechaDesde)){
+        if (fechaDesde && gasto.fecha < Date.parse(fechaDesde)) {
             filtrado = false;
         }
 
-        if(fechaHasta && gasto.fecha > Date.parse(fechaHasta)){
-            filtrado = false;
-        }
-        
-        if(valorMinimo && gasto.valor < valorMinimo){
+        if (fechaHasta && gasto.fecha > Date.parse(fechaHasta)) {
             filtrado = false;
         }
 
-        if(valorMaximo && gasto.valor > valorMaximo) {
+        if (valorMinimo && gasto.valor < valorMinimo) {
             filtrado = false;
         }
 
-        if(descripcionContiene && !gasto.descripcion.toLowerCase().includes(descripcionContiene.toLowerCase()) ) {
+        if (valorMaximo && gasto.valor > valorMaximo) {
             filtrado = false;
         }
 
-        if(etiquetasTiene ){
+        if (descripcionContiene && !gasto.descripcion.toLowerCase().includes(descripcionContiene.toLowerCase())) {
+            filtrado = false;
+        }
+
+        if (etiquetasTiene) {
             let encontrado = false;
 
             etiquetasTiene.forEach(etiqueta => {
-                if (gasto.etiquetas.includes(etiqueta)){
+                if (gasto.etiquetas.includes(etiqueta)) {
                     encontrado = true;
                 }
             })
 
-            if (!encontrado){
+            if (!encontrado) {
                 filtrado = false;
             }
         }
@@ -179,12 +179,12 @@ function filtrarGastos({fechaDesde, fechaHasta, valorMinimo, valorMaximo, descri
 
 function agruparGastos(periodo = "mes", etiquetas, fechaDesde, fechaHasta = Date.now()) {
     //llama a filtrarGastos y devuelve una lista filtrada
-    let gastosAgrupados = filtrarGastos({etiquetasTiene:etiquetas, fechaDesde:fechaDesde, fechaHasta:fechaHasta});
+    let gastosAgrupados = filtrarGastos({ etiquetasTiene: etiquetas, fechaDesde: fechaDesde, fechaHasta: fechaHasta });
 
     //variable objeto q acumula la suma de los gastos previamente filtrados
-    let objeto = gastosAgrupados.reduce(function (objetoAcumulador, gasto){
+    let objeto = gastosAgrupados.reduce(function (objetoAcumulador, gasto) {
 
-        if(typeof objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] != "number"){
+        if (typeof objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] != "number") {
             objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] = 0;
         }
 
@@ -192,7 +192,7 @@ function agruparGastos(periodo = "mes", etiquetas, fechaDesde, fechaHasta = Date
         objetoAcumulador[gasto.obtenerPeriodoAgrupacion(periodo)] += parseFloat(gasto.valor);
 
         return objetoAcumulador;
-    },{});
+    }, {});
 
     return objeto;
 }
@@ -240,6 +240,17 @@ function calcularTotalGastos() {
 function calcularBalance() {
     return presupuesto - calcularTotalGastos();
 }
+
+function transformarListadoEtiquetas(stringIntroducido){
+
+    var regex = /[\s,:.;~]+/g;
+
+    //el corregido es el introducido separado en partes donde hay un patrón definido en la variable regex, y ahora es un array de etiquetas
+    var stringCorregido = stringIntroducido.split(regex);
+    
+    return stringCorregido;
+}
+
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.
 // Las funciones y objetos deben tener los nombres que se indican en el enunciado
