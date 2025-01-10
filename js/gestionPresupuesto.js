@@ -243,7 +243,7 @@ function calcularBalance() {
 
 function transformarListadoEtiquetas(stringIntroducido){
 
-    var regex = /[\s,:.;~]+/g;
+    let regex = /[\s,:.;~]+/g;
 
     //el corregido es el introducido separado en partes donde hay un patrón definido en la variable regex, y ahora es un array de etiquetas
     var stringCorregido = stringIntroducido.split(regex);
