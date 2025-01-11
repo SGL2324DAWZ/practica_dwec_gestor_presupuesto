@@ -342,6 +342,38 @@ let cancelarNuevoGastoHandle = function () {
 }
 
 
+let filtrarGastoWeb = function(){
+    this.handleEvent = function(event) {
+        event.preventDefault();
+        
+        let fechaDesde = this.formulario.elements["formulario-filtrado-fecha-desde"].value;
+        let fechaHasta = this.formulario.elements["formulario-filtrado-fecha-hasta"].value;
+        let valorMinimo = Number(this.formulario.elements["formulario-filtrado-valor-minimo"].value);
+        let valorMaximo = this.formulario.elements["formulario-filtrado-valor-maximo"].value;
+        let descripcionContiene = this.formulario.elements["formulario-filtrado-descripcion"].value;
+        let etiquetasTiene = this.formulario.elements["formulario-filtrado-etiquetas-tiene"].value;
+
+        //llamar a transformarListadoEtiquetas si hay etiquetas
+        if(etiquetasTiene){
+            etiquetasTiene = libreriaGestion.transformarListadoEtiquetas(etiquetasTiene);
+        }
+
+        //objeto para filtrarGastos
+        let filtrados = libreriaGestion.filtrarGastos({ fechaDesde, fechaHasta, valorMinimo, valorMaximo, descripcionContiene, etiquetasTiene });
+        
+        //actualizar la lista de gastos filtrados
+        filtrados.forEach(gasto => {
+            mostrarGastoWeb(gasto, "listado-gastos-completo");
+        });
+    }
+}
+
+    let formulario = document.getElementById("formulario-filtrado");
+
+    let filtrarResultados = new filtrarGastoWeb();
+    filtrarResultados.formulario = formulario;
+    formulario.addEventListener('submit', filtrarResultados);
+
 
 
 export {
