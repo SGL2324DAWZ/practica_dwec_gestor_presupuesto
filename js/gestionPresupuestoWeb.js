@@ -373,22 +373,38 @@ let filtrarGastoWeb = function(){
 
 //practica almacenamiento
 
-    let formulario = document.getElementById("formulario-filtrado");
-    let filtrarResultados = new filtrarGastoWeb();
-    filtrarResultados.formulario = formulario;
-    formulario.addEventListener('submit', filtrarResultados);
+let formulario = document.getElementById("formulario-filtrado");
+let filtrarResultados = new filtrarGastoWeb();
+filtrarResultados.formulario = formulario;
+formulario.addEventListener('submit', filtrarResultados);
 
-    function guardarGastosWeb(){
-        this.handleEvent= function(event){
-            
-            localStorage.setItem("GestorGastosDWEC", JSON.stringify(gestionPresupuesto.listarGastos()));
-        }
+function guardarGastosWeb(){
+    this.handleEvent= function(event){
+        
+        localStorage.setItem("GestorGastosDWEC", JSON.stringify(libreriaGestion.listarGastos()));
     }
-    
-    let btnGuardarGastos = document.getElementById("guardar-gastos");
-    btnGuardarGastos.addEventListener('click', new guardarGastosWeb());
+}
 
-    
+let btnGuardarGastos = document.getElementById("guardar-gastos");
+btnGuardarGastos.addEventListener('click', new guardarGastosWeb());
+
+function cargarGastosWeb(){
+    this.handleEvent= function(event){
+        event.preventDefault();
+
+        if(localStorage.getItem("GestorGastosDWEC")){
+            libreriaGestion.cargarGastos(JSON.parse(localStorage.getItem("GestorGastosDWEC")));
+        }
+        else{
+            libreriaGestion.cargarGastos([]);
+        }
+
+        repintar();
+    }   
+}
+
+let btnCargarGastos = document.getElementById("cargar-gastos");
+btnCargarGastos.addEventListener('click', new cargarGastosWeb());
 
 export {
     mostrarDatoEnId,
