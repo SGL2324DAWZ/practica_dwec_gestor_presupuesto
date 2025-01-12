@@ -345,13 +345,15 @@ let cancelarNuevoGastoHandle = function () {
 let filtrarGastoWeb = function(){
     this.handleEvent = function(event) {
         event.preventDefault();
-        
+
         let fechaDesde = this.formulario.elements["formulario-filtrado-fecha-desde"].value;
         let fechaHasta = this.formulario.elements["formulario-filtrado-fecha-hasta"].value;
         let valorMinimo = Number(this.formulario.elements["formulario-filtrado-valor-minimo"].value);
         let valorMaximo = this.formulario.elements["formulario-filtrado-valor-maximo"].value;
         let descripcionContiene = this.formulario.elements["formulario-filtrado-descripcion"].value;
         let etiquetasTiene = this.formulario.elements["formulario-filtrado-etiquetas-tiene"].value;
+
+        document.getElementById("listado-gastos-completo").innerHTML = "";
 
         //llamar a transformarListadoEtiquetas si hay etiquetas
         if(etiquetasTiene){
@@ -369,7 +371,6 @@ let filtrarGastoWeb = function(){
 }
 
     let formulario = document.getElementById("formulario-filtrado");
-
     let filtrarResultados = new filtrarGastoWeb();
     filtrarResultados.formulario = formulario;
     formulario.addEventListener('submit', filtrarResultados);
