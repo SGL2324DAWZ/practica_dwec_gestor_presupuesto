@@ -341,6 +341,7 @@ let cancelarNuevoGastoHandle = function () {
     }
 }
 
+//practica regex
 
 let filtrarGastoWeb = function(){
     this.handleEvent = function(event) {
@@ -370,12 +371,24 @@ let filtrarGastoWeb = function(){
     }
 }
 
+//practica almacenamiento
+
     let formulario = document.getElementById("formulario-filtrado");
     let filtrarResultados = new filtrarGastoWeb();
     filtrarResultados.formulario = formulario;
     formulario.addEventListener('submit', filtrarResultados);
 
+    function guardarGastosWeb(){
+        this.handleEvent= function(event){
+            
+            localStorage.setItem("GestorGastosDWEC", JSON.stringify(gestionPresupuesto.listarGastos()));
+        }
+    }
+    
+    let btnGuardarGastos = document.getElementById("guardar-gastos");
+    btnGuardarGastos.addEventListener('click', new guardarGastosWeb());
 
+    
 
 export {
     mostrarDatoEnId,
