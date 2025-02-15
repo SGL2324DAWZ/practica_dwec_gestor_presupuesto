@@ -406,6 +406,48 @@ function cargarGastosWeb(){
 let btnCargarGastos = document.getElementById("cargar-gastos");
 btnCargarGastos.addEventListener('click', new cargarGastosWeb());
 
+//practica comunicación asíncrona
+
+function cargarGastosApiHandle(){
+    this.handleEvent= function(event){
+        event.preventDefault();
+        cargarGastosApi()
+
+        
+    }
+}
+
+function cargarGastosApi(){
+    let nombreUsuario = document.getElementById("input#nombre_usuario").value;
+        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest'+nombreUsuario, {method: 'Get'})
+            .then(response => response.json())
+            .then(data => {
+                console.log(libreriaGestion.listarGastos());
+                console.log(data);
+                libreriaGestion.limpiarGastos();
+                console.log(libreriaGestion.listarGastos());
+                libreriaGestion.cargarGastos(data);
+
+                let elemento = document.getElementById("listado-gastos-filtrado-1");
+                elemento.innerHTML="";
+
+                elemento = document.getElementById("listado-gastos-filtrado-2");
+                elemento.innerHTML="";
+
+                elemento = document.getElementById("listado-gastos-filtrado-3");
+                elemento.innerHTML="";
+                
+                elemento = document.getElementById("listado-gastos-filtrado-4");
+                elemento.innerHTML="";
+
+                repintar();
+            })
+            .catch(err => console.log(err));
+}
+
+let btnCargarGastosApi = document.getElementById("cargar-gastos-api");
+btnCargarGastosApi.addEventListener('click', new cargarGastosApiHandle());
+
 export {
     mostrarDatoEnId,
     mostrarGastoWeb,
