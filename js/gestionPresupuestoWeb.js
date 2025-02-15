@@ -127,44 +127,53 @@ let editarHandleformulario = function () {
         let plantillaFormulario = document.getElementById("formulario-template").content.cloneNode(true);
         var formulario = plantillaFormulario.querySelector("form");
 
-        formulario.elements.descripcion.value = this.gasto.descripcion;
-        formulario.elements.valor.value = this.gasto.valor;
-        formulario.elements.fecha.value = new Date(this.gasto.fecha).toISOString().split("T")[0];
-        formulario.elements.etiquetas.value = this.gasto.etiquetas.join(", ");
+        this.divGasto.appendChild(formulario);
 
-        let objetoEditarGastoHandle = new editarGastoFormularioHandle();
-        objetoEditarGastoHandle.gasto = this.gasto;
-        objetoEditarGastoHandle.divGasto = this.divGasto;
-        formulario.addEventListener("submit", objetoEditarGastoHandle);
+        this.botonEditar.setAttribute('disabled', "");
 
-        let botonCancelar = formulario.querySelector("button.cancelar");
-        let objetoBtnCancelar = new cancelarEditarGastoHandle();
-        objetoBtnCancelar.divGasto = this.divGasto
-        botonCancelar.addEventListener("click", objetoBtnCancelar);
+        let btnEditarGastoApi = document.createElement("button");
+        btnEditarGastoApi.id="gasto-editar-api";
+        btnEditarGastoApi.innerHTML="Editar (API)"
+        formulario.appendChild(btnEditarGastoApi)
+        var objetoEditarApi = new editarGastoApiHandle();
+        objetoEditarApi.gasto = this.gasto;
+
+        btnEditarGastoApi.addEventListener("click", objetoEditarApi);
 
 
-        this.divGasto.appendChild(formulario)
+        formulario.elements.descripcion.value=this.gasto.descripcion;
+        formulario.elements.valor.value=this.gasto.valor;
+        formulario.elements.fecha.value=this.gasto.fecha;
+        formulario.elements.etiquetas.value=this.gasto.etiquetas;
 
-        
-        this.divGasto.querySelector("button.gasto-editar-formulario").setAttribute("disabled", "");
+        let form = new EditarGastoHandle();
+        form.gasto = this.gasto;
+        formulario.addEventListener("submit", form);
+
+        let btnCancelar = formulario.querySelector("button.cancelar");
+        let cancelarForm = new CancelarCrearGastoHandle(this.botonEditar);
+        btnCancelar.addEventListener('click', cancelarForm);
     }
 }
 
-let editarGastoFormularioHandle = function () {
-    this.handleEvent = function (event) {
+function editarGastoApiHandle(){
+    this.handleEvent= function(event){
         event.preventDefault();
-        let form = this.divGasto.querySelector("form")
-        let descripcion = form.elements.descripcion.value;
-        let valor = parseFloat(form.elements.valor.value);
-        let fecha = new Date(form.elements.fecha.value);
-        let etiquetas = form.elements.etiquetas.value.split(",");
+        var nombreUsuario = document.getElementById("nombre_usuario").value;
 
-        this.gasto.actualizarDescripcion(descripcion);
-        this.gasto.actualizarValor(valor);
-        this.gasto.actualizarFecha(fecha);
-        this.gasto.anyadirEtiquetas(etiquetas);
+        let form = document.forms[1];
 
-        repintar();
+        var nuevoGasto = new gestionPresupuesto.CrearGasto(form.elements.descripcion.value, Number(form.elements.valor.value), new Date(form.elements.fecha.value), form.elements.etiquetas.value.split(","));
+        
+        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/'+nombreUsuario+"/"+this.gasto.gastoId, {method: 'Put',headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nuevoGasto)})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                cargarGastosApi();
+            })
+            .catch(err => console.log(err));
+
+        
     }
 }
 
@@ -198,6 +207,7 @@ let EditarHandle = function () {
     }
 }
 
+
 let BorrarHandle = function () {
     this.handleEvent = function () {
 
@@ -207,29 +217,29 @@ let BorrarHandle = function () {
     }
 }
 
-let BorrarApiHandle = function(){
-    this.handleEvent= function(event){
-        event.preventDefault();
-        var nombreUsuario = document.getElementById("nombre_usuario").value;
-        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest'+nombreUsuario+"/"+this.gasto.gastoId, {method: 'Delete'})
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                libreriaGestion.borrarGasto(this.gasto.gastoId);
-                cargarGastosApi();
-            })
-            .catch(err => console.log(err));
-
-            
-    }
-}
-
 let BorrarEtiquetasHandle = function () {
     this.handleEvent = function () {
 
         this.gasto.borrarEtiquetas(this.etiqueta);
 
         repintar();
+    }
+}
+
+let BorrarApiHandle = function(){
+    this.handleEvent= function(event){
+        event.preventDefault();
+        var nombreUsuario = document.getElementById("nombre_usuario").value;
+        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/'+nombreUsuario+"/"+this.gasto.gastoId, {method: 'Delete'})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                gestionPresupuesto.borrarGasto(this.gasto.gastoId);
+                cargarGastosApi();
+            })
+            .catch(err => console.log(err));
+
+            
     }
 }
 
@@ -321,6 +331,14 @@ btnanyadirGasto.addEventListener("click", nuevoGastoWeb);
 
 //practica formularios
 
+var CancelarCrearGastoHandle = function(boton){
+    this.handleEvent= function(event){
+        document.forms[0].remove();
+
+        boton.removeAttribute("disabled");
+    }
+}
+
 function nuevoGastoWebFormulario() {
     let plantillaFormulario = document.getElementById("formulario-template").content.cloneNode(true);
     var formulario = plantillaFormulario.querySelector("form");
@@ -333,6 +351,21 @@ function nuevoGastoWebFormulario() {
     let botonAnyadirGasto = document.getElementById("anyadirgasto-formulario").setAttribute("disabled", "");
 
     formulario.addEventListener("submit", new nuevoGastoFormularioHandle());
+    
+    let btnNuevoGastoApi = document.createElement("button");
+    btnNuevoGastoApi.id="gasto-enviar-api";
+    formulario.appendChild(btnNuevoGastoApi);
+    btnNuevoGastoApi.innerHTML="Enviar (API)"
+    var objetoNuevoApi = new nuevoGastoApiHandle();
+
+    btnNuevoGastoApi.addEventListener("click", objetoNuevoApi);
+
+    let btnAnyadirGastoForm = document.getElementById("anyadirgasto-formulario");
+    btnAnyadirGastoForm.setAttribute('disabled', "");
+
+    let btnCancelar = formulario.querySelector("button.cancelar");
+    let cancelarForm = new CancelarCrearGastoHandle(btnAnyadirGastoForm);
+    btnCancelar.addEventListener('click', cancelarForm);
 }
 
 let botonAnyadirFormulario = document.getElementById("anyadirgasto-formulario");
@@ -366,6 +399,34 @@ let cancelarNuevoGastoHandle = function () {
         form.remove();
 
         let botonAnyadirGasto = document.getElementById("anyadirgasto-formulario").removeAttribute("disabled");
+    }
+}
+
+function nuevoGastoApiHandle(){
+    this.handleEvent= function(event){
+        event.preventDefault();
+        var nombreUsuario = document.getElementById("nombre_usuario").value;
+
+        let form = document.forms[0];
+
+        var nuevoGasto = {
+            descripcion :form.elements.descripcion.value, 
+            valor:form.elements.valor.value, 
+            fecha:form.elements.fecha.value, 
+            etiquetas: form.elements.etiquetas.value.split(","),
+            usuario:nombreUsuario
+        }
+        
+        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest/'+nombreUsuario, {method: 'Post',headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nuevoGasto)})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                //gestionPresupuesto.anyadirGasto(nuevoGasto);
+                cargarGastosApi();
+            })
+            .catch(err => console.log(err));
+
+        
     }
 }
 
