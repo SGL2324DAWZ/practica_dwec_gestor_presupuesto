@@ -91,6 +91,17 @@ function mostrarGastoWeb(gasto, idElemento) {
 
         divGasto.appendChild(botonBorrar);
 
+        let botonBorrarApi = document.createElement('button');
+        botonBorrarApi.type="button";
+        botonBorrarApi.textContent="Borrar (API)";
+        botonBorrarApi.classList="gasto-borrar";
+
+        let objetoBorrarApi = new BorrarApiHandle();
+        objetoBorrarApi.gasto=gasto;
+
+        botonBorrarApi.addEventListener("click", objetoBorrarApi);
+        divGasto.appendChild(botonBorrarApi);
+
         let botonEditarForm = document.createElement("button");
         botonEditarForm.textContent = "Editar (formulario)";
         botonEditarForm.classList = "gasto-editar-formulario";
@@ -193,6 +204,23 @@ let BorrarHandle = function () {
         libreriaGestion.borrarGasto(this.gasto.id);
 
         repintar();
+    }
+}
+
+let BorrarApiHandle = function(){
+    this.handleEvent= function(event){
+        event.preventDefault();
+        var nombreUsuario = document.getElementById("nombre_usuario").value;
+        fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest'+nombreUsuario+"/"+this.gasto.gastoId, {method: 'Delete'})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                libreriaGestion.borrarGasto(this.gasto.gastoId);
+                cargarGastosApi();
+            })
+            .catch(err => console.log(err));
+
+            
     }
 }
 
