@@ -501,13 +501,11 @@ function cargarGastosApiHandle(){
     this.handleEvent= function(event){
         event.preventDefault();
         cargarGastosApi()
-
-        
     }
 }
 
 function cargarGastosApi(){
-    let nombreUsuario = document.getElementById("input#nombre_usuario").value;
+    let nombreUsuario = document.getElementById("nombre_usuario").value;
         fetch('https://suhhtqjccd.execute-api.eu-west-1.amazonaws.com/latest'+nombreUsuario, {method: 'Get'})
             .then(response => response.json())
             .then(data => {
