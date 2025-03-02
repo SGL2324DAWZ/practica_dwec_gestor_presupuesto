@@ -30,10 +30,6 @@ function mostrarPresupuesto() {
     return resultado;
 }
 
-function limpiarGastos() {
-    gastos=[];
-}
-
 function CrearGasto(descripcionGasto, valorGasto, fechaGasto, ...etiquetasGasto) {
     //asigna a la descripcion del objeto la pasada por parametro
     this.descripcion = descripcionGasto;
@@ -299,6 +295,5 @@ export {
     filtrarGastos,
     agruparGastos,
     transformarListadoEtiquetas,
-    cargarGastos,
-    limpiarGastos
+    cargarGastos
 }
