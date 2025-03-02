@@ -131,12 +131,38 @@ let editarHandleformulario = function () {
         objetoBtnCancelar.divGasto = this.divGasto
         botonCancelar.addEventListener("click", objetoBtnCancelar);
 
-
         this.divGasto.appendChild(formulario)
 
-        
         this.divGasto.querySelector("button.gasto-editar-formulario").setAttribute("disabled", "");
-    }
+
+        //manejador de eventos para el boton Enviar (API)
+        let botonEnviarApi = formulario.querySelector(".gasto-enviar-api");
+        botonEnviarApi.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            let nombreUsuario = document.getElementById("nombre_usuario").value.trim();
+            if (!nombreUsuario) {
+                console.error("Debes ingresar un nombre de usuario.");
+                return;
+            }
+
+            let descripcion = formulario.elements.descripcion.value.trim();
+            let valor = parseFloat(formulario.elements.valor.value);
+            let fecha = formulario.elements.fecha.value;
+            let etiquetas = formulario.elements.etiquetas.value.split(",").map(e => e.trim());
+
+            let gastoActualizado = { descripcion, valor, fecha, etiquetas };
+
+            fetch(`${API_URL}/${nombreUsuario}/${this.gasto.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(gastoActualizado)
+            })
+            .then(response => response.json())
+            .then(() => cargarGastosApi()) // 🔄 Recargar la lista tras la actualización
+            .catch(error => console.error("Error al actualizar el gasto en la API:", error));
+        });
+    };
 }
 
 let editarGastoFormularioHandle = function () {
@@ -479,6 +505,8 @@ function cargarGastosApi(){
 
 let btnCargarGastosApi = document.getElementById("cargar-gastos-api");
 btnCargarGastosApi.addEventListener('click', new cargarGastosApiHandle());
+
+
 
 export {
     mostrarDatoEnId,
