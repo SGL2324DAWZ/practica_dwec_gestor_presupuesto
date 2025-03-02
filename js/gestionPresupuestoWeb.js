@@ -304,7 +304,39 @@ function nuevoGastoWebFormulario() {
 
     let botonAnyadirGasto = document.getElementById("anyadirgasto-formulario").setAttribute("disabled", "");
 
-    formulario.addEventListener("submit", new nuevoGastoFormularioHandle());
+    formulario.addEventListener("submit", new nuevoGastoFormularioHandle());ç
+    
+    // Capturar el botón "Enviar (API)" dentro del formulario y añadir un evento de clic
+    let botonEnviarApi = formulario.querySelector(".gasto-enviar-api");
+    botonEnviarApi.addEventListener("click", function (event) {
+        event.preventDefault();
+        
+        let nombreUsuario = document.getElementById("nombre_usuario").value.trim();
+        if (!nombreUsuario) {
+            console.error("Debes ingresar un nombre de usuario.");
+            return;
+        }
+        
+        let descripcion = formulario.elements.descripcion.value.trim();
+        let valor = parseFloat(formulario.elements.valor.value);
+        let fecha = formulario.elements.fecha.value;
+        let etiquetas = formulario.elements.etiquetas.value.split(",").map(e => e.trim());
+        
+        let nuevoGasto = { descripcion, valor, fecha, etiquetas };
+        
+        fetch(`${API_URL}/${nombreUsuario}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoGasto)
+        })
+        .then(response => response.json())
+        .then(() => {
+            cargarGastosApi(); // Recargar la lista de gastos desde la API
+            formulario.reset(); // Limpia el formulario tras el envío
+        })
+        .catch(error => console.error("Error al guardar el gasto en la API:", error));
+    });
+    
 }
 
 let botonAnyadirFormulario = document.getElementById("anyadirgasto-formulario");
