@@ -330,7 +330,7 @@ function nuevoGastoWebFormulario() {
 
     let botonAnyadirGasto = document.getElementById("anyadirgasto-formulario").setAttribute("disabled", "");
 
-    formulario.addEventListener("submit", new nuevoGastoFormularioHandle());ç
+    formulario.addEventListener("submit", new nuevoGastoFormularioHandle());
     
     // Capturar el botón "Enviar (API)" dentro del formulario y añadir un evento de clic
     let botonEnviarApi = formulario.querySelector(".gasto-enviar-api");
